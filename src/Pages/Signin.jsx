@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {useState} from 'react';
 
 export default function Signin() {
@@ -38,7 +39,7 @@ export default function Signin() {
             className="w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-in-out"
             />
           
-          <div>
+          <div className='relative'>
             
             <input className='w-full' 
             type={showPassword ? "text": "password"} 
@@ -48,8 +49,12 @@ export default function Signin() {
             placeholder="Password"
             className="w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-in-out"
             />
+            
             </div>
-
+             <div className='flex justify-between'>
+              <p>Don't have an account? <a href="/sign-up">Register </a> </p>
+               <p>Forgot Password<a href="/forgot-password"></a></p> 
+             </div>
           </form>
         </div>
     </div>
