@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import OAuth from "../Components/OAuth";
+import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
+import { toast } from "react-toastify";
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -10,11 +12,28 @@ export default function SignIn() {
     password: "",
   });
   const { email, password } = formData;
+  const navigate = useNavigate();
   function onChange(e) {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.id]: e.target.value,
     }));
+  }
+  async function onSubmit(e) {
+    e.preventDefault();
+    try {
+      const auth = getAuth();
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      if (userCredential.user) {
+        navigate("/");
+      }
+    } catch (error) {
+      toast.error("Bad user credentials");
+    }
   }
   return (
     <section>
@@ -28,7 +47,7 @@ export default function SignIn() {
           />
         </div>
         <div className="w-full md:w-[67%] lg:w-[40%] lg:ml-20">
-          <form>
+          <form onSubmit={onSubmit}>
             <input
               type="email"
               id="email"
@@ -61,18 +80,20 @@ export default function SignIn() {
             <div className="flex justify-between whitespace-nowrap text-sm sm:text-lg">
               <p className="mb-6">
                 Don't have a account?
-                <a href="/sign-up"
+                <Link
+                  to="/sign-up"
                   className="text-red-600 hover:text-red-700 transition duration-200 ease-in-out ml-1"
                 >
                   Register
-                </a>
+                </Link>
               </p>
               <p>
-                <a href="/forgot-password"
+                <Link
+                  to="/forgot-password"
                   className="text-blue-600 hover:text-blue-800 transition duration-200 ease-in-out"
                 >
                   Forgot password?
-                </a>
+                </Link>
               </p>
             </div>
             <button
